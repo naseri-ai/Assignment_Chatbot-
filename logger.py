@@ -6,7 +6,7 @@ LOG_FILE = "chatbot_logs.csv"
 
 
 def log(question, answer, confidence):
-    os.makedirs("logs", exist_ok=True)
+    %os.makedirs("logs", exist_ok=True)
 
     exists = os.path.isfile(LOG_FILE)
 
