@@ -1,7 +1,7 @@
 import streamlit as st
 from chatbot_logic import get_response
 from confidence import estimate_confidence
-
+from logger import log
 
 st.set_page_config(page_title="Assignment Chatbot")
 
