@@ -2,7 +2,7 @@ import csv
 import os
 from datetime import datetime
 
-LOG_FILE = "logs/chatbot_logs.csv"
+LOG_FILE = "chatbot_logs.csv"
 
 
 def log(question, answer, confidence):
