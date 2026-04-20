@@ -1,24 +1,23 @@
-import csv
-import os
+from supabase import create_client
 from datetime import datetime
 
-LOG_FILE = "chatbot_logs.csv"
+# 🔑 Replace with your Supabase credentials
+SUPABASE_URL = "https://nbisgligcpjvwdsndmfp.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iaXNnbGlnY3Bqdndkc25kbWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MDQwOTYsImV4cCI6MjA5MjE4MDA5Nn0.pFptiVEl9224J_Vk9RKm1byLyotB4FCkWbBtMZetSr4"
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 def log(question, answer, confidence):
-    #os.makedirs("logs", exist_ok=True)
+    try:
+        data = {
+            "question": question,
+            "answer": answer,
+            "confidence": float(confidence),
+            "created_at": datetime.utcnow().isoformat()
+        }
 
-    exists = os.path.isfile(LOG_FILE)
+        supabase.table("chat_logs").insert(data).execute()
 
-    with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-
-        if not exists:
-            writer.writerow(["time", "question", "answer", "confidence"])
-
-        writer.writerow([
-            datetime.now().isoformat(),
-            question,
-            answer,
-            confidence
-        ])
+    except Exception as e:
+        print("Logging error:", e)
