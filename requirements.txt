@@ -5,3 +5,5 @@ scikit-learn
 sentence-transformers
 torch
 supabase
+torchvision
+transformers
