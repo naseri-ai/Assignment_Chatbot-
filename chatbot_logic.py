@@ -24,16 +24,16 @@ for entry in KNOWLEDGE_BASE:
 
 def keyword_score(query, patterns):
     query_words = set(query.lower().split())
-    score = 0
+    scores = []
 
     for pattern in patterns:
         pattern_words = set(pattern.lower().split())
         overlap = query_words.intersection(pattern_words)
 
-        if overlap:
-            score += len(overlap) / len(pattern_words)
+        if pattern_words:
+            scores.append(len(overlap) / len(pattern_words))
 
-    return score
+    return max(scores) if scores else 0
 
 
 def compute_scores(question):
@@ -47,6 +47,8 @@ def compute_scores(question):
         patterns = item["patterns"]
 
         semantic = cosine_sim(q_vec, vec) if vec is not None else 0
+        semantic = (semantic + 1) / 2
+
         keyword = keyword_score(question, patterns)
 
         final = (SEM_WEIGHT * semantic) + (KEY_WEIGHT * keyword)
@@ -69,7 +71,7 @@ def get_response(question):
     if top1["score"] < 0.35:
         for entry in KNOWLEDGE_BASE:
             if entry["intent"] == "fallback":
-                return entry["answer"], top1["score"]
+                return entry["answer"], top1["score"], "fallback"
 
     # Multi-intent logic
     if top2["score"] > (top1["score"] * MULTI_INTENT_THRESHOLD):
@@ -78,6 +80,6 @@ def get_response(question):
             "\n\nAdditionally:\n" +
             top2["entry"]["answer"]
         )
-        return combined, top1["score"]
+        return combined, top1["score"], top1["entry"]["intent"]
 
-    return top1["entry"]["answer"], top1["score"]
+    return top1["entry"]["answer"], top1["score"], top1["entry"]["intent"]
