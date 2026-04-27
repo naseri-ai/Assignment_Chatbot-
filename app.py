@@ -27,7 +27,7 @@ if question:
     st.write(answer)
 
     st.markdown("### 🔍 Confidence")
-    st.progress(confidence)
+    st.progress(float(confidence))
 
     if confidence < 0.55:
         st.warning("⚠️ Please confirm this with your tutor.")
