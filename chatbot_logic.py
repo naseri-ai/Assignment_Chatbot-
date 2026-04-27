@@ -1,8 +1,8 @@
 from knowledge_base import KNOWLEDGE_BASE
 from embeddings import encode, cosine_sim
 
-SEM_WEIGHT = 0.6
-KEY_WEIGHT = 0.4
+SEM_WEIGHT = 0.5
+KEY_WEIGHT = 0.5
 MULTI_INTENT_THRESHOLD = 0.75  # second intent must be close
 
 
@@ -68,7 +68,7 @@ def get_response(question):
     top2 = ranked[1]
 
     # If low confidence → fallback
-    if top1["score"] < 0.35:
+    if top1["score"] < 0.5:
         for entry in KNOWLEDGE_BASE:
             if entry["intent"] == "fallback":
                 return entry["answer"], top1["score"], "fallback"
