@@ -68,7 +68,7 @@ def get_response(question):
     top2 = ranked[1]
 
     # If low confidence → fallback
-    if top1["score"] < 0.6:
+    if top1["score"] < 0.5:
         for entry in KNOWLEDGE_BASE:
             if entry["intent"] == "fallback":
                 return entry["answer"], top1["score"], "fallback"
